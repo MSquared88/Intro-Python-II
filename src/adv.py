@@ -42,18 +42,51 @@ room['treasure'].s_to = room['narrow']
 
 p1 = Player("Roger Wilco", 100, [], room['outside'])
 
-# Write a loop that:
 
 # * Prints the current room name
 
-# * Prints the current description (the textwrap module might be useful here).
+#start game
+print(f"\nYou have entered Matthew's Adventure. Only the strong will survive.\n \n{p1.room}")
+# Write a loop that:
+while True:
+    try:
+        # * Waits for user input and decides what to do.
+        user = input("[l] Look [n] Move North  [s] Move South   [e] Move East  [w] Move West  [q] Quit\n")
 
-# * Waits for user input and decides what to do.
+        # If the user enters "q", quit the game.    
+        if user == "q":
+            break
 
+        # * Prints the current description (the textwrap module might be useful here).
+        elif user == "l":
+            print(p1.room,'\n')
+        # If the user enters a cardinal direction, attempt to move to the room there.
+        # Print an error message if the movement isn't allowed.
+        elif user == "n":
+            p1.room = p1.room.n_to
+            print(p1.room)
+            continue
+                
+        elif user == "s":
+            p1.room = p1.room.s_to
+            print(p1.room)
+            continue
 
-# If the user enters a cardinal direction, attempt to move to the room there.
+        elif user == "e":
+            p1.room = p1.room.e_to
+            print(p1.room)
+            continue
+        elif user == "w":
+            p1.room = p1.room.w_to
+            print(p1.room)
+            continue
+        else:
+            print(f"\n{user} is not a valid input\n\n")
+            print(p1.room)
+            continue
 
+    except AttributeError:
+        p1.room.wrong_way()
+        continue
 
-# Print an error message if the movement isn't allowed.
-
-# If the user enters "q", quit the game.
+print("\nThanks for playing!!\n")
