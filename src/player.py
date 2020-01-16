@@ -2,11 +2,19 @@
 # currently.
 
 class Player:
-    def __init__(self, name, health, items, starting_room):
+    def __init__(self, name, health, inventory, starting_room):
         self.name = name
         self.health = health
-        self.items = items
+        self.inventory = inventory
         self.current_room = starting_room
+
+    def __str__(self):
+        display_string = ""
+        display_string += f"\n----------------\n"
+        display_string += f"\nName:{self.name}\n"
+        display_string += f"\nHealth:{self.health}\n"
+        display_string += f"\nIventory:{self.inventory}"
+        return display_string
 
     def move(self, direction):
         next_room  =  self.current_room.get_room_by_direction(direction)

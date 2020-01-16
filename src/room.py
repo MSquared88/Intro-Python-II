@@ -2,11 +2,10 @@
 # description attributes.
 
 class Room:
-    def __init__(self, name, description, item="stuff"):
+    def __init__(self, name, description, items=[]):
         self.name = name
         self.description = description 
-        self.item = item  
-
+        self.items = items
         self.n_to = None
         self.s_to = None
         self.e_to = None
@@ -18,7 +17,8 @@ class Room:
         else: 
             return None
 
+
     def __str__(self):
-        return f"\n{self.name}\n{self.description}\n"
+        return f"\n{self.name}\n{self.description}\n\nAvailable Items {[i.name for i in self.items]}"
     def wrong_way(self):
         print(f"\nThe way is blocked. Try to go somewhere else.\n\n{self.description}\n")
