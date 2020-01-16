@@ -5,7 +5,7 @@ from player import Player
 
 room = {
     'outside':  Room("Outside Cave Entrance",
- "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -37,56 +37,41 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
-
 # Make a new player object that is currently in the 'outside' room.
+
 
 p1 = Player("Roger Wilco", 100, [], room['outside'])
 
+directions = ["n", "s", "e", "w"]
 
-# * Prints the current room name
 
-#start game
-print(f"\nYou have entered Matthew's Adventure. Only the strong will survive.\n \n{p1.room}")
+# start game
+print(
+    f"\nYou have entered Matthew's Adventure. Only the strong will survive.\n \n{p1.current_room}")
 # Write a loop that:
 while True:
-    try:
-        # * Waits for user input and decides what to do.
-        user = input("[l] Look [n] Move North  [s] Move South   [e] Move East  [w] Move West  [q] Quit\n")
 
-        # If the user enters "q", quit the game.    
-        if user == "q":
-            break
+    # * Waits for user_input input and decides what to do.
+    user_input = input(
+        "[l] Look [n] Move North  [s] Move South   [e] Move East  [w] Move West  [q] Quit\n ~~>")
 
-        # * Prints the current description (the textwrap module might be useful here).
-        elif user == "l":
-            print(p1.room,'\n')
-        # If the user enters a cardinal direction, attempt to move to the room there.
-        # Print an error message if the movement isn't allowed.
-        elif user == "n":
-            p1.room = p1.room.n_to
-            print(p1.room)
-            continue
-                
-        elif user == "s":
-            p1.room = p1.room.s_to
-            print(p1.room)
-            continue
+    # If the user_input enters "q", quit the game.
+    if user_input == "q":
+        print("\nThanks for playing!!\n")
+        exit()
 
-        elif user == "e":
-            p1.room = p1.room.e_to
-            print(p1.room)
-            continue
-        elif user == "w":
-            p1.room = p1.room.w_to
-            print(p1.room)
-            continue
-        else:
-            print(f"\n{user} is not a valid input\n\n")
-            print(p1.room)
-            continue
+    elif user_input == "l":
+        print(p1.current_room, '\n')
 
-    except AttributeError:
-        p1.room.wrong_way()
+    # If the user_input enters a cardinal direction, attempt to move to the room there.
+    elif user_input in directions:
+        p1.move(user_input)
+    # else user_input gives invalid input print a error message.
+    else:
+        print(f"\n{user_input} is not a valid input\n")
+        print(p1.current_room)
         continue
 
-print("\nThanks for playing!!\n")
+# Print an error message if the movement isn't allowed.
+
+
