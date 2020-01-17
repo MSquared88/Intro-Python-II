@@ -13,10 +13,10 @@ items = {
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance","North of you, the cave mount beckons"),
+    'outside':  Room("Outside Cave Entrance","North of you, the cave mount beckons", [items["Torch"]]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", [items["The Sword of a Thousand Truths"]]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -26,15 +26,8 @@ the distance, but there is no way across the chasm."""),
 to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+chamber! You see something shiny in the corner. The only exit is to the south.""", [items["The Eye of Agammoto"]]),
 }
-
-#place items in rooms
-
-
-room['outside'].items.append(items["Torch"])
-room['outside'].items.append(items["The Eye of Agammoto"])
 
 
 # Link rooms together
@@ -66,6 +59,10 @@ ui_display += "\nMovement: [n]orth  [s]outh  [e]ast  [w]est  \n"
 
 directions = ("n", "s", "e", "w")
 
+def err_msg():
+    print(f"\nThat is not a valid input\n")
+    print(player1.current_room)
+
 # start game
 print(
     f"\nYou have entered Matthew's Adventure. Only the strong will survive. {player1.current_room}\n\n{ui_display}")
@@ -86,29 +83,34 @@ while True:
 
         # If the user_input enters a cardinal direction, attempt to move to the room there.
         elif user_input[0] in directions:
-            player1.move(user_input)
+            player1.move(user_input[0])
 
         # If the user_input enters "q", quit the game.
         elif user_input[0] == "q":
             print("\nThanks for playing!!\n")
-            exit()
+            break
         
         elif user_input[0] == "h":
             print(ui_display)
+        else:
+            err_msg()
+            continue    
+
 
     elif len(user_input) == 2:
         #action verb logic
         if user_input[1] in items:
             player1.action(user_input[0], items[user_input[1]])
-        else: 
-            print("\nthat item does not exist")
+        else:
+            err_msg()
+            continue    
 
-
-    # else user_input gives invalid input print a error message.
     else:
-        print(f"\n{user_input} is not a valid input\n")
-        print(player1.current_room)
-        continue
+        err_msg()
+        continue    
+
+
+
 
 
 

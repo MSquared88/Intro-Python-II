@@ -12,6 +12,7 @@ class Room:
         self.w_to = None
     
     def get_room_by_direction(self,direction):
+        print(direction)
         if hasattr(self, f"{direction}_to"):
             return getattr(self, f"{direction}_to")
         else: 
