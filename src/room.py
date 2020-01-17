@@ -16,9 +16,17 @@ class Room:
             return getattr(self, f"{direction}_to")
         else: 
             return None
+    
+    def get_item(self, item):
+        if item in self.items:
+            self.items.remove(item)
+            return True
+        else:
+            print("That item is not here.")
+            return False
 
 
     def __str__(self):
-        return f"\n{self.name}\n{self.description}\n\nAvailable Items {[i.name for i in self.items]}"
+        return f"\n{self.name}\n{self.description}\n\nRoom Items {[i.name for i in self.items]}"
     def wrong_way(self):
         print(f"\nThe way is blocked. Try to go somewhere else.\n\n{self.description}\n")

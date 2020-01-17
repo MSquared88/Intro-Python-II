@@ -5,9 +5,9 @@ from item import Item
 #declare items
 
 items = {
-     "eye": Item("The Eye of Agammoto", "The The Eye of Agammoto can maniputale time", 50),
-     "sword": Item("The Sword of a Thousand Truths", "A sword made by Hatori Hanzo", 100),
-     "torch": Item("Torch", "Lets you see in dark places", 10)
+     "The Eye of Agammoto": Item("The Eye of Agammoto", "The The Eye of Agammoto can maniputale time", 50),
+     "The Sword of a Thousand Truths": Item("The Sword of a Thousand Truths", "A sword made by Hatori Hanzo", 100),
+     "Torch": Item("Torch", "Lets you see in dark places", 10)
 }
 
 # Declare all the rooms
@@ -33,8 +33,8 @@ earlier adventurers. The only exit is to the south."""),
 #place items in rooms
 
 
-room['outside'].items.append(items["torch"])
-room['outside'].items.append(items["eye"])
+room['outside'].items.append(items["Torch"])
+room['outside'].items.append(items["The Eye of Agammoto"])
 
 
 # Link rooms together
@@ -56,35 +56,53 @@ room['treasure'].s_to = room['narrow']
 
 player1 = Player("Roger Wilco", 100, [], room['outside'])
 
+
+
 ui_display = ""
 ui_display += "\n----------------\n"
-ui_display += "\nActions: [l] Look [i] inventory  [q] Quit\n"
-ui_display += "\nMovement: [n] Move North  [s] Move South  [e] Move East  [w] Move West  \n"
-ui_display += "~~>"
+ui_display += "\nActions: [look]  [i]nventory  [q]uit [h]elp\n"
+ui_display += "\nMovement: [n]orth  [s]outh  [e]ast  [w]est  \n"
+
 
 directions = ("n", "s", "e", "w")
+
 # start game
 print(
-    f"\nYou have entered Matthew's Adventure. Only the strong will survive. {player1.current_room}")
-# Write a loop that:
+    f"\nYou have entered Matthew's Adventure. Only the strong will survive. {player1.current_room}\n\n{ui_display}")
+# REPL
 while True:
 
+    user_input = input("~~>").split()
+
     # * Waits for user_input input and decides what to do.
-    user_input = input(ui_display)
 
-    # If the user_input enters "q", quit the game.
-    if user_input == "q":
-        print("\nThanks for playing!!\n")
-        exit()
-    if user_input == "i":
-        print(player1)
+    #one command logic
+    if len(user_input) == 1:
+        if user_input[0] == "i":
+            print(player1)
 
-    elif user_input == "l":
-        print(player1.current_room, '\n')
+        elif user_input[0] == "look":
+            print(player1.current_room, '\n')
 
-    # If the user_input enters a cardinal direction, attempt to move to the room there.
-    elif user_input in directions:
-        player1.move(user_input)
+        # If the user_input enters a cardinal direction, attempt to move to the room there.
+        elif user_input[0] in directions:
+            player1.move(user_input)
+
+        # If the user_input enters "q", quit the game.
+        elif user_input[0] == "q":
+            print("\nThanks for playing!!\n")
+            exit()
+        
+        elif user_input[0] == "h":
+            print(ui_display)
+
+    elif len(user_input) == 2:
+        #action verb logic
+        if user_input[1] in items:
+            player1.action(user_input[0], items[user_input[1]])
+        else: 
+            print("\nthat item does not exist")
+
 
     # else user_input gives invalid input print a error message.
     else:
@@ -92,6 +110,5 @@ while True:
         print(player1.current_room)
         continue
 
-# Print an error message if the movement isn't allowed.
 
 

@@ -9,3 +9,6 @@ class Item:
     
     def look(self): 
         return f"{self.description}"
+
+    def on_take(self):
+        return f"You have picked up the {self.name}." 
