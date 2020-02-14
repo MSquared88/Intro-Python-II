@@ -1,14 +1,22 @@
 from room import Room
 from player import Player
+from item import Item
+
+#declare items
+
+items = {
+     "The Eye of Agammoto": Item("The Eye of Agammoto", "The The Eye of Agammoto can maniputale time", 50),
+     "The Sword of a Thousand Truths": Item("The Sword of a Thousand Truths", "A sword made by Hatori Hanzo", 100),
+     "Torch": Item("Torch", "Lets you see in dark places", 10)
+}
 
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance",
- "North of you, the cave mount beckons"),
+    'outside':  Room("Outside Cave Entrance","North of you, the cave mount beckons", [items["Torch"]]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", [items["The Sword of a Thousand Truths"]]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -18,8 +26,7 @@ the distance, but there is no way across the chasm."""),
 to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+chamber! You see something shiny in the corner. The only exit is to the south.""", [items["The Eye of Agammoto"]]),
 }
 
 
@@ -37,56 +44,73 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
-
 # Make a new player object that is currently in the 'outside' room.
 
-p1 = Player("Roger Wilco", 100, [], room['outside'])
+
+player1 = Player("Roger Wilco", 100, [], room['outside'])
 
 
-# * Prints the current room name
 
-#start game
-print(f"\nYou have entered Matthew's Adventure. Only the strong will survive.\n \n{p1.room}")
-# Write a loop that:
+ui_display = ""
+ui_display += "\n----------------\n"
+ui_display += "\nActions: [look]  [i]nventory  [q]uit [h]elp\n"
+ui_display += "\nMovement: [n]orth  [s]outh  [e]ast  [w]est  \n"
+
+
+directions = ("n", "s", "e", "w")
+
+def err_msg():
+    print(f"\nThat is not a valid input\n")
+    print(player1.current_room)
+
+# start game
+print(
+    f"\nYou have entered Matthew's Adventure. Only the strong will survive. {player1.current_room}\n\n{ui_display}")
+# REPL
 while True:
-    try:
-        # * Waits for user input and decides what to do.
-        user = input("[l] Look [n] Move North  [s] Move South   [e] Move East  [w] Move West  [q] Quit\n")
 
-        # If the user enters "q", quit the game.    
-        if user == "q":
+    user_input = input("~~>").split()
+
+    # * Waits for user_input input and decides what to do.
+
+    #one command logic
+    if len(user_input) == 1:
+        if user_input[0] == "i":
+            print(player1)
+
+        elif user_input[0] == "look":
+            print(player1.current_room, '\n')
+
+        # If the user_input enters a cardinal direction, attempt to move to the room there.
+        elif user_input[0] in directions:
+            player1.move(user_input[0])
+
+        # If the user_input enters "q", quit the game.
+        elif user_input[0] == "q":
+            print("\nThanks for playing!!\n")
             break
-
-        # * Prints the current description (the textwrap module might be useful here).
-        elif user == "l":
-            print(p1.room,'\n')
-        # If the user enters a cardinal direction, attempt to move to the room there.
-        # Print an error message if the movement isn't allowed.
-        elif user == "n":
-            p1.room = p1.room.n_to
-            print(p1.room)
-            continue
-                
-        elif user == "s":
-            p1.room = p1.room.s_to
-            print(p1.room)
-            continue
-
-        elif user == "e":
-            p1.room = p1.room.e_to
-            print(p1.room)
-            continue
-        elif user == "w":
-            p1.room = p1.room.w_to
-            print(p1.room)
-            continue
+        
+        elif user_input[0] == "h":
+            print(ui_display)
         else:
-            print(f"\n{user} is not a valid input\n\n")
-            print(p1.room)
-            continue
+            err_msg()
+            continue    
 
-    except AttributeError:
-        p1.room.wrong_way()
-        continue
 
-print("\nThanks for playing!!\n")
+    elif len(user_input) == 2:
+        #action verb logic
+        if user_input[1] in items:
+            player1.action(user_input[0], items[user_input[1]])
+        else:
+            err_msg()
+            continue    
+
+    else:
+        err_msg()
+        continue    
+
+
+
+
+
+
